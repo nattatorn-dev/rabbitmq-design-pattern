@@ -2,9 +2,7 @@ package main
 
 import (
 	"log"
-	"math/rand"
 	"os"
-	"time"
 
 	"github.com/streadway/amqp"
 )
@@ -25,13 +23,13 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"ack",    // name
-		"direct", // type
-		false,    // durable
-		false,    // auto-deleted
-		false,    // internal
-		false,    // no-wait
-		nil,      // arguments
+		"priority-message", // name
+		"direct",           // type
+		false,              // durable
+		false,              // auto-deleted
+		false,              // internal
+		false,              // no-wait
+		nil,                // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
@@ -51,14 +49,16 @@ func main() {
 		false,     // delete when unused
 		false,     // exclusive
 		false,     // no-wait
-		nil,
+		amqp.Table{ // arguments
+			"x-max-priority": 9, // set the maximum priority to 9
+		},
 	)
 	failOnError(err, "Failed to declare a queue")
 
 	err = ch.QueueBind(
-		q.Name, // queue name
-		"",     // routing key
-		"ack",  // exchange
+		q.Name,             // queue name
+		"",                 // routing key
+		"priority-message", // exchange
 		false,
 		nil,
 	)
@@ -79,19 +79,8 @@ func main() {
 
 	go func() {
 		for d := range msgs {
+			log.Printf("priority %d", d.Priority)
 			log.Printf("%s", d.Body)
-
-			rand.Seed(time.Now().UnixNano())
-
-			// Generate a random boolean value
-			randomBool := rand.Intn(2) == 0
-
-			log.Println("randomBool", randomBool)
-
-			if !randomBool {
-				return
-			}
-
 			if err := d.Ack(false); err != nil {
 				log.Fatalln("Failed to acknowledge message:", err)
 			}

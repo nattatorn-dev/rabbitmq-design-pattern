@@ -36,9 +36,9 @@ func main() {
 	failOnError(err, "Failed to declare an exchange")
 
 	err = ch.Qos(
-		1,    // prefetch count
-		0,    // prefetch size
-		true, // global
+		1,     // prefetch count
+		0,     // prefetch size
+		false, // global
 	)
 	failOnError(err, "Failed to set QoS")
 

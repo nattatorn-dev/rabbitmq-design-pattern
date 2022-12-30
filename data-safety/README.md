@@ -7,7 +7,7 @@ $ go run data-safety/transaction/producers/producer-group.go <round>
 2 Run Consumer
 
 ```sh
-$ go run data-safety/transaction/consumers/consumer-group.go <queue_name_1>
+$ go run data-safety/transaction/consumers/consumer-group.go <queue_name>
 ```
 
 ### Transaction

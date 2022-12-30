@@ -55,7 +55,7 @@ func main() {
 				Body:        []byte(strconv.Itoa(i)),
 			})
 		failOnError(err, "Failed to publish a message")
-		log.Printf("Sent message round %s", round)
+		log.Printf("Sent message round %d", i)
 		time.Sleep(1 * time.Second)
 	}
 

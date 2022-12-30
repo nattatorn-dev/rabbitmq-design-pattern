@@ -42,6 +42,7 @@ func main() {
 
 	if err != nil {
 		failOnError(err, "priority should be number")
+		return
 	}
 
 	log.Println(">>> priority", priorityNumber)

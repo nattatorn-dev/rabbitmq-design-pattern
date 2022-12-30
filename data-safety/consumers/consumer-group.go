@@ -34,9 +34,9 @@ func main() {
 	failOnError(err, "Failed to declare an exchange")
 
 	err = ch.Qos(
-		10,   // prefetch count
-		0,    // prefetch size
-		true, // global
+		10,    // prefetch count
+		0,     // prefetch size
+		false, // global
 	)
 	failOnError(err, "Failed to set QoS")
 
@@ -81,6 +81,7 @@ func main() {
 
 			if err := d.Ack(false); err != nil {
 				log.Fatalln("Failed to acknowledge message:", err)
+				return
 			}
 		}
 	}()

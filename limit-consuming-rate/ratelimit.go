@@ -17,7 +17,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func main() {
+func rate() {
 	ctx := context.Background()
 	rate := limiter.Rate{
 		Period: 1 * time.Minute,
@@ -54,5 +54,4 @@ func main() {
 	if limiterCtx.Reached {
 		log.Printf("Too Many Requests from %s", "api.example.com")
 	}
-
 }

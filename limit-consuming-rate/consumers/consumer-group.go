@@ -56,13 +56,13 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"limit-consuming-rate", // name
-		"direct",               // type
-		true,                   // durable
-		false,                  // auto-deleted
-		false,                  // internal
-		false,                  // no-wait
-		nil,                    // arguments
+		"limit-consuming-rate-message", // name
+		"direct",                       // type
+		true,                           // durable
+		false,                          // auto-deleted
+		false,                          // internal
+		false,                          // no-wait
+		nil,                            // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
@@ -87,9 +87,9 @@ func main() {
 	failOnError(err, "Failed to declare a queue")
 
 	err = ch.QueueBind(
-		q.Name,                 // queue name
-		"",                     // routing key
-		"limit-consuming-rate", // exchange
+		q.Name,                         // queue name
+		"",                             // routing key
+		"limit-consuming-rate-message", // exchange
 		false,
 		nil,
 	)

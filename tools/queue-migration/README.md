@@ -1,33 +1,33 @@
 FYI: At least one - The consumer should handle idempotency
 
-Type: at least one without QOS
+Type: at least one without QOS  
 Run
 ```
 $ go run tools/queue-migration/abuse-mode/consumer-group.go <source_queue>
 ```
 20000 message / 1 sec
 
-Type: at least one without publisher confirm/transaction
+Type: at least one without publisher confirm/transaction  
 Run
 ```
 $ go run tools/queue-migration/no-guarantee/consumer-group.go <source_queue>
 ```
 20000 message / 28 sec
 
-Type: at least one
+Type: at least one  
 
 Run
 ```
 $ go run tools/queue-migration/at-least-one/consumer-group.go <source_queue>
 ```
-20000 message / 53 sec
+20000 message / 55 sec
 
 Type: exactly-once  
 Run
 ```
 $ go run tools/queue-migration/exactly-once/consumer-group.go <source_queue>
 ```
-20000 message / 52 sec
+20000 message / 48 sec
 
 Perf  
 1 Create a new queue <queue_name>

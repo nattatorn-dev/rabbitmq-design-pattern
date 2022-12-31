@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/streadway/amqp"
 )
@@ -25,13 +24,13 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"transaction-message", // name
-		"direct",              // type
-		false,                 // durable
-		false,                 // auto-deleted
-		false,                 // internal
-		false,                 // no-wait
-		nil,                   // arguments
+		"messages", // name
+		"direct",   // type
+		true,       // durable
+		false,      // auto-deleted
+		false,      // internal
+		false,      // no-wait
+		nil,        // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
@@ -46,17 +45,16 @@ func main() {
 
 	for i := 0; i < roundNumber; i++ {
 		err = ch.Publish(
-			"transaction-message", // exchange
-			"",                    // routing key
-			false,                 // mandatory
-			false,                 // immediate
+			"messages", // exchange
+			"",         // routing key
+			false,      // mandatory
+			false,      // immediate
 			amqp.Publishing{
 				ContentType: "text/plain",
 				Body:        []byte(strconv.Itoa(i)),
 			})
 		failOnError(err, "Failed to publish a message")
 		log.Printf("Sent message round %d", i)
-		time.Sleep(1 * time.Second)
 	}
 
 	log.Printf("Sent %s", round)

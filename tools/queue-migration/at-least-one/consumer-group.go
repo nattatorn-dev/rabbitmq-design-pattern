@@ -91,7 +91,7 @@ func main() {
 	if err != nil {
 		failOnError(err, "Failed to enable publisher confirms on the channel")
 	}
-	confirms := ch.NotifyPublish(make(chan amqp.Confirmation, 1))
+	publishConfirms := ch.NotifyPublish(make(chan amqp.Confirmation, 1))
 
 	forever := make(chan bool)
 
@@ -117,38 +117,27 @@ func main() {
 				return
 			}
 
-			// Wait for the publish confirmation
-			isConfirm := confirmOne(confirms)
+			// Wait for the publisher confirm
+			confirm := <-publishConfirms
 
-			// consumer ack
-			if !isConfirm {
-				log.Printf("Publish not confirmed")
+			// Ack the message
+			if !confirm.Ack {
+				log.Fatalln("broker not confirm")
 				return
 			}
 
-			log.Printf("Sent %s", d.Body)
-
-			err = d.Ack(false)
-			if err != nil {
+			// broker confirm
+			log.Printf("broker confirm")
+			if err = ch.Ack(d.DeliveryTag, false); err != nil {
 				log.Fatalln("Failed to acknowledge message:", err)
 				return
 			}
-			log.Printf("Consumer ack message successfully")
 
+			log.Printf("Consumer ack message successfully")
+			log.Printf("Sent %s", d.Body)
 		}
 	}()
 
 	log.Printf("Waiting for logs. To exit press CTRL+C")
 	<-forever
-}
-
-func confirmOne(confirms <-chan amqp.Confirmation) bool {
-	confirmed := <-confirms
-	if confirmed.Ack {
-		log.Println("Publish confirmed")
-		return true
-	} else {
-		log.Println("Publish not confirmed")
-		return false
-	}
 }

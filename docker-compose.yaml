@@ -14,8 +14,8 @@ services:
       - 5672:5672
       - 15672:15672
   redis:  
-    image: redis
-    hostname: redis:7
+    image: redis:7
+    hostname: redis
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:

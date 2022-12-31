@@ -15,13 +15,11 @@ $ go run tools/queue-migration/no-guarantee/consumer-group.go <source_queue>
 20000 message / 28 sec
 
 Type: at least one  
-
 Run
 ```
 $ go run tools/queue-migration/at-least-one/consumer-group.go <source_queue>
 ```
 20000 message / 55 sec
-
 Type: exactly-once  
 Run
 ```
